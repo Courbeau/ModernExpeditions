@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Modern Expeditions</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    canvas {
+      touch-action: none;
+    }
+    body {
+      font-family: 'Poppins', sans-serif;
+    }
+    .team-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .team-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+  </style>
+</head>
+<body class="bg-gray-100 text-gray-900">
+  <!-- Header -->
+  <header class="fixed top-0 w-full bg-white shadow-md z-10">
+    <nav class="max-w-7xl mx-auto px-4 py-4 flex justify-center items-center">
+      <a href="model.html" class="w-[90%] max-w-md bg-purple-600 text-white px-3 py-1 sm:px-4 sm:py-2 rounded-full text-sm sm:text-base font-semibold hover:bg-purple-700 transition text-center">
+        View 3d-model of Xanadu<span class="animate-pulse-effect">_</span>
+      </a>
+    </nav>
+  </header>
+
+  <!-- Landing Section -->
+  <section class="min-h-screen flex flex-col justify-center items-center text-center px-4 bg-gradient-to-r from-indigo-500 to-purple-600 text-white">
+    <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold mb-4 animate-fade-in">Modern Expeditions</h1>
+    <p class="text-base sm:text-lg md:text-xl text-gray-200 mb-6">SeaFocus Intelligence Hunt 2025</p>
+    <a href="#team" class="bg-white text-indigo-600 px-4 sm:px-6 py-2 sm:py-3 rounded-full font-semibold hover:bg-indigo-100 transition">Meet the Team</a>
+  </section>
+
+  <!-- Team Section -->
+  <section id="team" class="px-4 py-16 bg-white">
+    <h2 class="text-2xl sm:text-3xl font-semibold text-center mb-10 text-gray-800">Meet the Team</h2>
+    <div class="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="team-card bg-gray-50 p-6 rounded-xl shadow-lg">
+        <h3 class="text-lg sm:text-xl font-bold text-indigo-600">Aaro Korpela</h3>
+        <p class="text-sm text-gray-600">BSc. Tech, Industrial Engineering</p>
+        <a href="https://www.linkedin.com/in/aaro-korpela/" class="text-indigo-500 hover:text-indigo-700 text-sm">LinkedIn</a>
+      </div>
+      <div class="team-card bg-gray-50 p-6 rounded-xl shadow-lg">
+        <h3 class="text-lg sm:text-xl font-bold text-indigo-600">Farid Oladega</h3>
+        <p class="text-sm text-gray-600">MSc.Tech, Sustainable & Autonomous Systems</p>
+        <a href="https://www.linkedin.com/in/farid-oladega/" class="text-indigo-500 hover:text-indigo-700 text-sm">LinkedIn</a>
+      </div>
+      <div class="team-card bg-gray-50 p-6 rounded-xl shadow-lg">
+        <h3 class="text-lg sm:text-xl font-bold text-indigo-600">Surekha Medapati</h3>
+        <p class="text-sm text-gray-600">MSc.Tech, Sustainable & Autonomous Systems</p>
+        <a href="https://www.linkedin.com/in/sathi477/" class="text-indigo-500 hover:text-indigo-700 text-sm">LinkedIn</a>
+      </div>
+      <div class="team-card bg-gray-50 p-6 rounded-xl shadow-lg">
+        <h3 class="text-lg sm:text-xl font-bold text-indigo-600">Sina Kanesbi</h3>
+        <p class="text-sm text-gray-600">MSc. Tech, Smart Cities and Communities</p>
+        <a href="https://www.linkedin.com/in/sinakanesbi/" class="text-indigo-500 hover:text-indigo-700 text-sm">LinkedIn</a>
+      </div>
+      <div class="team-card bg-gray-50 p-6 rounded-xl shadow-lg">
+        <h3 class="text-lg sm:text-xl font-bold text-indigo-600">Joseph Goonewardena</h3>
+        <p class="text-sm text-gray-600">MSc.Tech, Sustainable & Autonomous Systems</p>
+        <a href="https://www.linkedin.com/in/rajindu-goonewardena94/" class="text-indigo-500 hover:text-indigo-700 text-sm">LinkedIn</a>
+      </div>
+      <div class="team-card bg-gray-50 p-6 rounded-xl shadow-lg">
+        <h3 class="text-lg sm:text-xl font-bold text-indigo-600">Reijo Österlund</h3>
+        <p class="text-sm text-gray-600">BSc. International Business Administration</p>
+        <a href="https://www.linkedin.com/in/reijo-osterlund/" class="text-indigo-500 hover:text-indigo-700 text-sm">LinkedIn</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-gray-900 text-white text-center py-6">
+    <p>© 2025 Modern Expeditions. All rights reserved.</p>
+  </footer>
+
+  <!-- Tailwind Animation -->
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          animation: {
+            'fade-in': 'fadeIn 1s ease-in-out',
+            'pulse-effect': 'pulseEffect 1.5s infinite ease-in-out',
+          },
+          keyframes: {
+            fadeIn: {
+              '0%': { opacity: '0', transform: 'translateY(20px)' },
+              '100%': { opacity: '1', transform: 'translateY(0)' },
+            },
+            pulseEffect: {
+              '0%, 100%': { opacity: '1', transform: 'scale(1)' },
+              '50%': { opacity: '0', transform: 'scale(1.2)' },
+            },
+          },
+        },
+      },
+    }
+  </script>
+</body>
+</html>

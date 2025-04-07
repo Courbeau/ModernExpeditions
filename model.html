@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>GLB Model with Water Plane</title>
+  <style>
+   
+   body {
+  margin: 0;
+  overflow: hidden;
+}
+
+canvas {
+  width: 100%;
+  height: 100vh;
+  display: block;
+}
+
+#spinMessage {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: clamp(1rem, 4vw, 2rem);
+  color: #000;
+  background: #ffffff;
+  padding: 1rem 2rem;
+  border-radius: 16px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  text-align: center;
+  transition: opacity 0.5s ease;
+  max-width: 90%;
+  word-wrap: break-word;
+}
+
+#spinMessage .pulse {
+  display: inline-block;
+  animation: pulse 1.4s ease-in-out infinite;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.3); opacity: 0.6; }
+  100% { transform: scale(1); opacity: 1; }
+}
+  </style>
+</head>
+<body>
+  <div id="container"></div>
+  <div id="spinMessage">Spin me <span class="pulse">🔄</span></div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r134/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.134/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.134/examples/js/loaders/DRACOLoader.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.134/examples/js/controls/OrbitControls.js"></script>
+
+  <script>
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0xcccccc);
+
+    const container = document.getElementById('container');
+    const camera = new THREE.PerspectiveCamera(100, window.innerWidth / window.innerHeight, 0.1, 1000);
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    container.appendChild(renderer.domElement);
+
+    const spinMessage = document.getElementById('spinMessage');
+
+    // Lighting
+    scene.add(new THREE.AmbientLight(0xffffff, 0.1));
+    const dirLight = new THREE.DirectionalLight(0xffffff, 0.3);
+    dirLight.position.set(5, 10, 7);
+    scene.add(dirLight);
+    const hemiLight = new THREE.HemisphereLight(0xffffff, 0x444444, 0.4);
+    hemiLight.position.set(0, 20, 0);
+    scene.add(hemiLight);
+
+    // Controls
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.minDistance = 0.5;
+    controls.maxDistance = 2;
+
+    // Remove spin message on first interaction
+    let hasInteracted = false;
+    const removeMessage = () => {
+      if (!hasInteracted) {
+        hasInteracted = true;
+        spinMessage.style.opacity = '0';
+        setTimeout(() => spinMessage.remove(), 500);
+      }
+    };
+    controls.addEventListener('start', removeMessage);
+
+    // Load model
+    const loader = new THREE.GLTFLoader();
+    const dracoLoader = new THREE.DRACOLoader();
+    dracoLoader.setDecoderPath('https://www.gstatic.com/draco/versioned/decoders/1.5.7/');
+    loader.setDRACOLoader(dracoLoader);
+
+    loader.load(
+      'malli2.glb',
+      gltf => {
+        const model = gltf.scene;
+        scene.add(model);
+
+        const box = new THREE.Box3().setFromObject(model);
+        const size = box.getSize(new THREE.Vector3());
+
+        model.position.set(0, 0, 0);
+        model.scale.setScalar(10 / Math.max(size.x, size.y, size.z));
+
+        camera.position.set(300, 30, -300);
+        camera.lookAt(0, 0, 0);
+        controls.target.set(0, 0, 0);
+        controls.update();
+
+        // Water plane
+        const waterGeo = new THREE.PlaneGeometry(1000, 1000);
+        const waterMat = new THREE.MeshPhongMaterial({
+          color: 0x1e90ff,
+          shininess: 100,
+          flatShading: true,
+        });
+        const waterPlane = new THREE.Mesh(waterGeo, waterMat);
+        waterPlane.rotation.x = -Math.PI / 2;
+        waterPlane.position.y = -0.01;
+        waterPlane.receiveShadow = true;
+        scene.add(waterPlane);
+      },
+      xhr => console.log((xhr.loaded / xhr.total * 100) + '% loaded'),
+      error => console.error('GLB load error:', error)
+    );
+
+    function animate() {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    }
+    animate();
+
+    window.addEventListener('resize', () => {
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    });
+  </script>
+</body>
+</html>
